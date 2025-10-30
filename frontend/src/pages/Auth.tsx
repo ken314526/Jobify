@@ -40,15 +40,20 @@ const Auth = () => {
       return;
     }
 
-    await dispatch(
+    const result = await dispatch(
       login({ email: loginEmail, password: loginPassword })
     );
 
-      toast.success("Login successful!");
-      navigate("/dashboard");
+    if (result.type.endsWith("rejected")) {
+      toast.error(result.payload.toString());
+      return;
+    }
+
+    toast.success("Login successful!");
+    navigate("/dashboard");
   };
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!signupName || !signupEmail || !signupPassword) {
@@ -61,9 +66,15 @@ const Auth = () => {
       return;
     }
 
-    dispatch(
+    const result = await dispatch(
       signup({ name: signupName, email: signupEmail, password: signupPassword })
     );
+
+    if (result.type.endsWith("rejected")) {
+      toast.error(result.payload.toString());
+      return;
+    }
+
     navigate("/dashboard");
   };
 

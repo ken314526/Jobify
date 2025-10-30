@@ -1,22 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-
-export interface Job {
-  _id?: string;
-  title: string;
-  description: string;
-  companyName: string;
-  lastDate: string;
-  postedDate: string;
-  status: 'active' | 'closed';
-  userId?: string;
-}
-
-interface JobsState {
-  jobs: Job[];
-  loading: boolean;
-  error: string | null;
-}
+import { Job, JobsState, User } from '../types';
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
 const API_URL = `${API_BASE}/jobs`;
@@ -47,10 +31,11 @@ export const fetchJobs = createAsyncThunk(
 
 export const fetchMyJobs = createAsyncThunk(
   'jobs/fetchMine',
-  async (_, { rejectWithValue }) => {
+  async (user: User, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('jwtToken');
-      const res = await axios.get(`${API_URL}`, {
+      const url = user.role === 'Admin' ? `${API_URL}` : `${API_URL}/my`;
+      const res = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return res.data;
@@ -132,7 +117,7 @@ export const toggleJobStatus = createAsyncThunk(
   async (jobId: string, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('jwtToken');
-      const res = await axios.patch(
+      const res = await axios.put(
         `${API_URL}/${jobId}/toggle-status`,
         null,
         {

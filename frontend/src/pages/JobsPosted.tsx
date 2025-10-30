@@ -19,13 +19,14 @@ import {
 
 const JobsPosted = () => {
   const { jobs, loading, error } = useAppSelector((state) => state.jobs);
+  const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [actionInProgress, setActionInProgress] = useState<string | null>(null);
 
   useEffect(() => {
-    dispatch(fetchMyJobs())
-  }, [dispatch]);
+    dispatch(fetchMyJobs(user));
+  }, [dispatch, user]);
 
   const handleDelete = async (id: string) => {
     try {

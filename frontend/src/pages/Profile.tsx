@@ -92,8 +92,8 @@ const Profile = () => {
                   id="email"
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled
                 />
               </div>
 

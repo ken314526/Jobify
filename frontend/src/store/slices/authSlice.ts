@@ -1,20 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
-
-interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-  jwtToken: string | null;
-  loading: boolean;
-  error: string | null;
-}
+import { User, AuthState } from "../types";
 
 const initialState: AuthState = {
   user: null,
